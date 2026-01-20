@@ -43,10 +43,7 @@ class PostController extends Controller
     {
         $post = $request->user()->posts()->create($request->validated());
 
-        return response()->json([
-            'message' => 'Post created successfully.',
-            'post' => $post,
-        ], Response::HTTP_CREATED);
+        return response()->json($post, Response::HTTP_CREATED);
     }
 
     /**
@@ -61,9 +58,10 @@ class PostController extends Controller
             abort(Response::HTTP_NOT_FOUND);
         }
 
+        // Include user data for the post
         $post->load('user');
 
-        return response()->json(['post' => $post]);
+        return response()->json($post);
     }
 
     /**
@@ -86,10 +84,7 @@ class PostController extends Controller
         // Authorization is handled by UpdatePostRequest::authorize()
         $post->update($request->validated());
 
-        return response()->json([
-            'message' => 'Post updated successfully.',
-            'post' => $post,
-        ]);
+        return response()->json($post);
     }
 
     /**
@@ -102,8 +97,6 @@ class PostController extends Controller
 
         $post->delete();
 
-        return response()->json([
-            'message' => 'Post deleted successfully.',
-        ]);
+        return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 }

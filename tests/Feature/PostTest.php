@@ -114,9 +114,7 @@ class PostTest extends TestCase
         $response = $this->getJson("/posts/{$post->id}");
 
         $response->assertOk()
-            ->assertJsonStructure([
-                'post' => ['id', 'title', 'content', 'user_id', 'is_draft', 'published_at', 'user'],
-            ]);
+            ->assertJsonStructure(['id', 'title', 'content', 'user_id', 'is_draft', 'published_at', 'user']);
     }
 
     public function test_posts_show_returns_404_for_draft_post(): void
@@ -191,8 +189,7 @@ class PostTest extends TestCase
         ]);
 
         $response->assertCreated()
-            ->assertJsonPath('message', 'Post created successfully.')
-            ->assertJsonPath('post.title', 'New Post');
+            ->assertJsonPath('title', 'New Post');
 
         $this->assertDatabaseHas('posts', [
             'title' => 'New Post',
@@ -258,8 +255,7 @@ class PostTest extends TestCase
         ]);
 
         $response->assertOk()
-            ->assertJsonPath('message', 'Post updated successfully.')
-            ->assertJsonPath('post.title', 'Updated Title');
+            ->assertJsonPath('title', 'Updated Title');
 
         $this->assertDatabaseHas('posts', [
             'id' => $post->id,
@@ -301,8 +297,7 @@ class PostTest extends TestCase
 
         $response = $this->actingAs($this->user)->deleteJson("/posts/{$post->id}");
 
-        $response->assertOk()
-            ->assertJsonPath('message', 'Post deleted successfully.');
+        $response->assertNoContent();
 
         $this->assertDatabaseMissing('posts', ['id' => $post->id]);
     }
