@@ -58,9 +58,6 @@ class PostController extends Controller
             abort(Response::HTTP_NOT_FOUND);
         }
 
-        // Include user data for the post
-        $post->load('user');
-
         return response()->json($post);
     }
 

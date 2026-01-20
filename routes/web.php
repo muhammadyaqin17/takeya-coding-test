@@ -18,25 +18,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 |--------------------------------------------------------------------------
 | Post Routes
 |--------------------------------------------------------------------------
-|
-| RESTful routes for the Post model.
-| Note: posts/create must be defined before posts/{post} to avoid route conflict.
-|
 */
 
-// Public index route
+// Public routes
 Route::get('posts', [PostController::class, 'index'])->name('posts.index');
 
-// Authenticated routes (defined before posts/{post} to prevent wildcard matching "create")
+// Authenticated routes (create must be before {post} wildcard)
 Route::middleware('auth')->group(function () {
     Route::get('posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::post('posts', [PostController::class, 'store'])->name('posts.store');
     Route::get('posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-    Route::match(['put', 'patch'], 'posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::put('posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    Route::patch('posts/{post}', [PostController::class, 'update']);
     Route::delete('posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 
-// Public show route (must be after posts/create)
+// Public show route (after create to prevent {post} matching "create")
 Route::get('posts/{post}', [PostController::class, 'show'])->name('posts.show');
 
 require __DIR__.'/settings.php';

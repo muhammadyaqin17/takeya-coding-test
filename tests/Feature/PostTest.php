@@ -114,7 +114,7 @@ class PostTest extends TestCase
         $response = $this->getJson("/posts/{$post->id}");
 
         $response->assertOk()
-            ->assertJsonStructure(['id', 'title', 'content', 'user_id', 'is_draft', 'published_at', 'user']);
+            ->assertJsonStructure(['id', 'title', 'content', 'user_id', 'is_draft', 'published_at']);
     }
 
     public function test_posts_show_returns_404_for_draft_post(): void
