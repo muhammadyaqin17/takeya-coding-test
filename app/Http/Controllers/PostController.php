@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -67,7 +68,7 @@ class PostController extends Controller
      */
     public function edit(Post $post): string
     {
-        $this->authorize('update', $post);
+        Gate::authorize('update', $post);
 
         return 'posts.edit';
     }
@@ -90,7 +91,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post): JsonResponse
     {
-        $this->authorize('delete', $post);
+        Gate::authorize('delete', $post);
 
         $post->delete();
 
