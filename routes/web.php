@@ -20,12 +20,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 |--------------------------------------------------------------------------
 |
 | RESTful routes for the Post model.
-| - Public routes: index, show
-| - Authenticated routes: create, store, edit, update, destroy
+| Using resource controller pattern for Laravel best practices.
 |
 */
 
-// Authenticated routes - defined FIRST to avoid {post} wildcard matching "create"
+// Public routes - anyone can view published posts
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+
+// Authenticated routes - must be before /posts/{post} to prevent route conflict
 Route::middleware('auth')->group(function () {
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
@@ -35,8 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 });
 
-// Public routes - anyone can view published posts
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+// Public show route - after authenticated routes to prevent {post} matching "create"
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
 
 require __DIR__.'/settings.php';

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class UpdatePostRequest extends FormRequest
 {
@@ -11,8 +12,8 @@ class UpdatePostRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Check if the authenticated user owns the post
-        return $this->user()->id === $this->route('post')->user_id;
+        // Use Gate to check authorization via PostPolicy
+        return Gate::allows('update', $this->route('post'));
     }
 
     /**
