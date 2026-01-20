@@ -94,6 +94,6 @@ class PostController extends Controller
 
         $post->delete();
 
-        return response()->json(null, Response::HTTP_NO_CONTENT);
+        return response()->json(['deleted' => true]);
     }
 }
